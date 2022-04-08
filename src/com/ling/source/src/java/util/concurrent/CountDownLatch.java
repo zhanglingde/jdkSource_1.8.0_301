@@ -197,6 +197,7 @@ public class CountDownLatch {
      */
     public CountDownLatch(int count) {
         if (count < 0) throw new IllegalArgumentException("count < 0");
+        // 设置 state
         this.sync = new Sync(count);
     }
 

@@ -1619,6 +1619,8 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
+     * 如果缺少一个 key，则计算生成一个 value，然后将 key value 放入 map；返回 value 值
+     *
      * If the specified key is not already associated with a value,
      * attempts to compute its value using the given mapping function
      * and enters it into this map unless {@code null}.  The entire

@@ -124,6 +124,7 @@ final class WeakCache<K, P, V> {
         while (true) {
             if (supplier != null) {
                 // supplier might be a Factory or a CacheValue<V> instance
+                // suppier 就是 Factory,此类定义在 WeakCache 内部
                 V value = supplier.get();
                 if (value != null) {
                     return value;
