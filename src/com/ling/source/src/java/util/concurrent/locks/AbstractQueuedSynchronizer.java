@@ -528,6 +528,9 @@ public abstract class AbstractQueuedSynchronizer
     private transient volatile Node tail;
 
     /**
+     * AQS 加锁锁的是 state；值为 0 为未加锁，1 为已加锁；
+     * 可重入锁是在值为 1（已加锁）时，可以再次进行加锁，将 1 修改为 2
+     *
      * The synchronization state.
      */
     private volatile int state;
@@ -584,9 +587,11 @@ public abstract class AbstractQueuedSynchronizer
         for (;;) {
             Node t = tail;
             if (t == null) { // Must initialize
+                // 设置 head 为哨兵节点（不对应线程，状态为 0）
                 if (compareAndSetHead(new Node()))
                     tail = head;
             } else {
+                // cas 尝试将 Node 对象加入 AQS 队列尾部
                 node.prev = t;
                 if (compareAndSetTail(t, node)) {
                     t.next = node;
@@ -599,20 +604,25 @@ public abstract class AbstractQueuedSynchronizer
     /**
      * Creates and enqueues node for current thread and given mode.
      *
-     * @param mode Node.EXCLUSIVE for exclusive, Node.SHARED for shared
+     * @param mode Node.EXCLUSIVE for exclusive, Node.SHARED for shared   独占锁、共享锁
      * @return the new node
      */
     private Node addWaiter(Node mode) {
+        // 将当前线程关联到一个 Node 对象上，
         Node node = new Node(Thread.currentThread(), mode);
         // Try the fast path of enq; backup to full enq on failure
+        // 如果 tail 不为 null， cas 尝试将 Node 对象加入 AQS 队列尾部
         Node pred = tail;
         if (pred != null) {
+            // 双向链表设置节点
             node.prev = pred;
+            // cas 把新节点设置为 tail 末端
             if (compareAndSetTail(pred, node)) {
                 pred.next = node;
                 return node;
             }
         }
+        // 尝试将 Node 加入 AQS
         enq(node);
         return node;
     }
@@ -793,15 +803,21 @@ public abstract class AbstractQueuedSynchronizer
      * @return {@code true} if thread should block
      */
     private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
+        // 获取上一个节点的状态
         int ws = pred.waitStatus;
         if (ws == Node.SIGNAL)
             /*
+             * 上一个节点在阻塞，返回 true，park 线程，自己也阻塞
+             *
              * This node has already set status asking a release
              * to signal it, so it can safely park.
              */
             return true;
+        // > 0 表示取消状态
         if (ws > 0) {
             /*
+             * 上一个节点取消，那么重构删除前面所有取消的节点，返回到外层循环重试
+             *
              * Predecessor was cancelled. Skip over predecessors and
              * indicate retry.
              */
@@ -811,6 +827,8 @@ public abstract class AbstractQueuedSynchronizer
             pred.next = node;
         } else {
             /*
+             * 这次还没有阻塞，但下次如果重试不成功，则需要阻塞，这时需要设置上一个节点状态为 Node.SIGNAL
+             *
              * waitStatus must be 0 or PROPAGATE.  Indicate that we
              * need a signal, but don't park yet.  Caller will need to
              * retry to make sure it cannot acquire before parking.
@@ -828,6 +846,8 @@ public abstract class AbstractQueuedSynchronizer
     }
 
     /**
+     * 阻塞当前线程
+     *
      * Convenience method to park and then check if interrupted
      *
      * @return {@code true} if interrupted
@@ -860,12 +880,18 @@ public abstract class AbstractQueuedSynchronizer
             boolean interrupted = false;
             for (;;) {
                 final Node p = node.predecessor();
+                // 上一个节点是 head，表示轮到自己（当前线程对应的 node）了，尝试获取
                 if (p == head && tryAcquire(arg)) {
+                    // 获取成功，设置自己（当前线程对应的 node ）为 head
                     setHead(node);
+                    // 上一个节点置空
                     p.next = null; // help GC
                     failed = false;
+                    // 返回中断标记
                     return interrupted;
                 }
+                // 判断是否应该 park
+                // parkAndCheckInterrupt：park 等待，此时 Node 的状态被置为 Node.SIGNAL
                 if (shouldParkAfterFailedAcquire(p, node) &&
                     parkAndCheckInterrupt())
                     interrupted = true;
@@ -1195,6 +1221,9 @@ public abstract class AbstractQueuedSynchronizer
      *        can represent anything you like.
      */
     public final void acquire(int arg) {
+        // Node.SHARED：共享锁
+        // addWaiter(Node.EXCLUSIVE), arg) 把当前线程作为排他形式添加到队列中
+        // 当 tryAcquire 返回为 false 时, 先调用 addWaiter, 接着 acquireQueued
         if (!tryAcquire(arg) &&
             acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
             selfInterrupt();
@@ -1258,6 +1287,7 @@ public abstract class AbstractQueuedSynchronizer
      * @return the value returned from {@link #tryRelease}
      */
     public final boolean release(int arg) {
+        // tryRelease 解锁，state--
         if (tryRelease(arg)) {
             Node h = head;
             if (h != null && h.waitStatus != 0)
