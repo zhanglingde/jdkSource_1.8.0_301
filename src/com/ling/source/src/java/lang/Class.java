@@ -675,6 +675,7 @@ public final class Class<T> implements java.io.Serializable,
      */
     @CallerSensitive
     public ClassLoader getClassLoader() {
+        // 获取 AppClassLoader
         ClassLoader cl = getClassLoader0();
         if (cl == null)
             return null;
