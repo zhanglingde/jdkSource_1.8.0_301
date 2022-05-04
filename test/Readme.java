@@ -3,6 +3,10 @@ import sun.misc.ProxyGenerator;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
+import com.ling.threadPool.FixedThreadPoolDemo;
+import com.ling.threadPool.CachedThreadPoolDemo;
+import com.ling.threadPool.newSingleThreadExecutorDemo;
+
 /**
  * @author zhangling
  * @date 2022/1/13 4:34 下午
@@ -23,4 +27,23 @@ public class Readme {
      * </ol>
      */
     void proxy(){}
+
+    /**
+     * 线程池
+     * <ul>
+     *     <li> 固定大小线程池 - newFixedThreadPool: {@link FixedThreadPoolDemo}  </li>
+     *     <li> 带缓冲线程池 - newCachedThreadPool: {@link CachedThreadPoolDemo}  </li>
+     *     <li> 单线程线程池 - newSingleThreadExecutor: {@link newSingleThreadExecutorDemo}  </li>
+     * </ul>
+     *
+     * 扩展线程池-定时任务线程池：
+     * <ul>
+     *     <li> Timer（已过时） {@link com.ling.threadPool.TestTimer} </li>
+     *     <li> newScheduledThreadPool（定时任务线程池）： {@link com.ling.threadPool.newScheduledThreadPoolDemo} </li>
+     * </ul>
+     *
+     *
+     *
+     */
+    void threadPool(){}
 }

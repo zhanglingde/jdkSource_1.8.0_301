@@ -148,6 +148,10 @@ public class Executors {
      * @throws IllegalArgumentException if {@code nThreads <= 0}
      */
     public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
+        /**
+         * 核心线程数 = 最大线程数，因此无需超时时间；
+         * 阻塞队列是无界的，可以存放任意数量的任务（最大值 Integer.VALUE_MAX，可能存在内存溢出）
+         */
         return new ThreadPoolExecutor(nThreads, nThreads,
                                       0L, TimeUnit.MILLISECONDS,
                                       new LinkedBlockingQueue<Runnable>(),
@@ -168,6 +172,7 @@ public class Executors {
      * @return the newly created single-threaded Executor
      */
     public static ExecutorService newSingleThreadExecutor() {
+        // FinalizableDelegatedExecutorService 装饰器模式，只对外暴露 ExecutorService 的接口，不暴露 ThreadPoolExecutor 中特有的方法
         return new FinalizableDelegatedExecutorService
             (new ThreadPoolExecutor(1, 1,
                                     0L, TimeUnit.MILLISECONDS,
@@ -213,6 +218,12 @@ public class Executors {
      * @return the newly created thread pool
      */
     public static ExecutorService newCachedThreadPool() {
+        /**
+         * 核心线程数是 0，最大线程数是 Integer.MAX_VALUE；
+         * 非核心线程存活时间是 60s（全部线程都是非核心线程，60s 后回收）；
+         * 任务队列采用 SynchronousQueue,容量为 0；所以来一个任务就起一个新的线程执行任务（一手交钱，一手交货），
+         * 如果线程池中有空闲的线程（线程执行完任务 60s 内未被回收），就用空闲线程执行任务
+         */
         return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                                       60L, TimeUnit.SECONDS,
                                       new SynchronousQueue<Runnable>());
