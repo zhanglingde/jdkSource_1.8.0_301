@@ -6,10 +6,12 @@ package com.ling.jvm;
  */
 public class T002_ClassLoaderLevel {
     public static void main(String[] args) {
-        // 返回null 表示用的是 BootstrapClassLoader
+        // 返回 null 表示用的是 BootstrapClassLoader
         System.out.println(String.class.getClassLoader());
         System.out.println(sun.awt.HKSCS.class.getClassLoader());
+        // ExtClassLoader（扩展类加载器）
         System.out.println(sun.net.spi.nameservice.dns.DNSNameService.class.getClassLoader());
+        // AppClassLoader（加载 classpath 包下的类）
         System.out.println(T002_ClassLoaderLevel.class.getClassLoader());
 
         System.out.println(sun.net.spi.nameservice.dns.DNSNameService.class.getClassLoader().getClass().getClassLoader());
