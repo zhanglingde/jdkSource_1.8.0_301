@@ -1,4 +1,4 @@
-package com.ling.juc;
+package com.ling.juc.lock;
 
 import java.util.concurrent.CountDownLatch;
 

@@ -1,4 +1,4 @@
-package com.ling.juc;
+package com.ling.juc.lock;
 
 public class AsyncDemo01{
 
