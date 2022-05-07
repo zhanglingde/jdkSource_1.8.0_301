@@ -45,12 +45,18 @@ public class ThreadPool_Exception {
         ExecutorService pool = Executors.newFixedThreadPool(3);
         ThreadPool_Exception h = new ThreadPool_Exception();
         List<String> errors = new ArrayList<>();
-
+        List<Future> futureList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
+            final int j = i;
+            Future<?> future = pool.submit(() -> {
+                log.debug("j：{}", j);
+                h.handle();
+            });
+            futureList.add(future);
+
+        }
+        for (Future future : futureList) {
             try {
-                Future<?> future = pool.submit(() -> {
-                    h.handle();
-                });
                 future.get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -64,8 +70,9 @@ public class ThreadPool_Exception {
         log.error("errors：{}", errors);
     }
 
-    public void handle() {
+    public String handle() {
         log.debug("handle start ...");
         int j = 1 / 0;
+        return "hello";
     }
 }
