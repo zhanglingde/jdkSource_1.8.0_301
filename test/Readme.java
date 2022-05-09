@@ -36,7 +36,12 @@ import com.ling.juc.demo03_thread.Demo06_ThreadState;
 import com.ling.juc.demo03_thread.Demo04_TwoPhaseTermination;
 
 /**
+ *
+ * 依赖：
+ *      ch.qos.logback:logback-classic:1.2.3
+ *      org.projectlombok:lombok:1.18.10
  * @author zhangling
+ *
  * @date 2022/1/13 4:34 下午
  */
 public class Readme {

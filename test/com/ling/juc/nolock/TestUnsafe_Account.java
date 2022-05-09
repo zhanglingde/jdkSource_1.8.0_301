@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author zhangling  2021/8/21 20:49
+ * Unsafe 实现 CAS 扣钱 Account
  */
 public class TestUnsafe_Account {
     public static void main(String[] args) {
@@ -32,6 +32,7 @@ class MyAtomicIntegerAccount implements Account {
     }
 
     public static void test(MyAtomicIntegerAccount account) {
+        // 1000 线程，每个线程扣减 10
         List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
             threads.add(new Thread(() -> {
