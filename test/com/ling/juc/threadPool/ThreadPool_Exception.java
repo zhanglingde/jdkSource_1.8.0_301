@@ -16,9 +16,9 @@ import java.util.concurrent.Future;
 public class ThreadPool_Exception {
     public static void main(String[] args) {
 
-        // exceptionHandle1();
+        exceptionHandle1();
 
-        exceptionHandle2();
+        // exceptionHandle2();
     }
 
     /**
@@ -32,6 +32,7 @@ public class ThreadPool_Exception {
                 try {
                     h.handle();
                 } catch (Exception e) {
+                    Throwable cause = e.getCause();
                     log.error(e.getMessage());
                 }
             });

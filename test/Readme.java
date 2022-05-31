@@ -46,6 +46,7 @@ import com.ling.juc.demo03_thread.Demo04_TwoPhaseTermination;
  */
 public class Readme {
 
+
     /**
      * 集合相关
      * <ul>
@@ -180,7 +181,10 @@ public class Readme {
 
 
     /**
+     * 模板方法：{@link ReentrantLockTest}
      * 装饰者：{@link com.ling.io.BufferedInputStreamDemo}
+     *
+     * 命令模式：{@link }
      */
     void test() {
     }
