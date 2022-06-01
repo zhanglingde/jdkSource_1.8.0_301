@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 条件变量
  */
-@Slf4j
+@Slf4j(topic = "c.ReentrantLock_Condition")
 public class ReentrantLock_Condition extends Thread{
     static ReentrantLock lock = new ReentrantLock();
     // 创建一个新的添加变量（休息室）

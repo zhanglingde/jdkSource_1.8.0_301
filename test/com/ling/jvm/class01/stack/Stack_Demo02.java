@@ -4,7 +4,7 @@ package com.ling.jvm.class01.stack;
  * 栈内存溢出  java.lang.StackOverflowError
  * -Xss256k
  */
-public class Demo02 {
+public class Stack_Demo02 {
     private static int count;
 
     public static void main(String[] args) {

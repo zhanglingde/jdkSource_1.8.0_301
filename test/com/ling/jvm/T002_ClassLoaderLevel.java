@@ -1,5 +1,7 @@
 package com.ling.jvm;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 自定义类加载器，只需要重写 findClass 方法
  *

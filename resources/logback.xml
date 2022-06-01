@@ -17,9 +17,9 @@
         <appender-ref ref="STDOUT"/>
     </logger>-->
 
-    <!--<logger name="org.springframework.security.web" level="DEBUG" additivity="false">
+    <logger name="com.ling.juc" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT"/>
-    </logger>-->
+    </logger>
     <logger name="c" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
